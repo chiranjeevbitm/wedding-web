@@ -6,7 +6,7 @@ const TABS = (L) => [
   { to: '/journey', hi: 'सफ़र', en: 'Journey', icon: '⋮' },
   { to: '/calendar', hi: 'कैलेंडर', en: 'Calendar', icon: '▦' },
   { to: '/checklist', hi: 'चेकलिस्ट', en: 'List', icon: '✓' },
-  { to: '/more', hi: 'और', en: 'More', icon: '⋯' },
+  { to: '/more', hi: 'फ़ीडबैक', en: 'Feedback', icon: '💬' },
 ];
 
 const LINKS = (L) => [
@@ -17,8 +17,7 @@ const LINKS = (L) => [
   { to: '/people', hi: 'लोग', en: 'People' },
   { to: '/travel', hi: 'सफ़र-ठहरना', en: 'Travel' },
   { to: '/guide', hi: 'रस्में·गीत', en: 'Rituals' },
-  { to: '/rsvp', hi: 'RSVP', en: 'RSVP' },
-  { to: '/more', hi: 'और', en: 'More' },
+  { to: '/more', hi: 'फ़ीडबैक', en: 'Feedback' },
 ];
 
 export default function Shell({ children }) {

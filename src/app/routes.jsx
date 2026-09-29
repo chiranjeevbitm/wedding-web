@@ -8,7 +8,6 @@ import Checklist from '../pages/Checklist.jsx';
 import People from '../pages/People.jsx';
 import Travel from '../pages/Travel.jsx';
 import Guide from '../pages/Guide.jsx';
-import Rsvp from '../pages/Rsvp.jsx';
 import About from '../pages/About.jsx';
 import More from '../pages/More.jsx';
 
@@ -23,7 +22,6 @@ export const router = createBrowserRouter([
   { path: '/people', element: wrap(<People />) },
   { path: '/travel', element: wrap(<Travel />) },
   { path: '/guide', element: wrap(<Guide />) },
-  { path: '/rsvp', element: wrap(<Rsvp />) },
   { path: '/about', element: wrap(<About />) },
   { path: '/more', element: wrap(<More />) },
   { path: '*', element: wrap(<div className="wrap"><div className="card"><h2>यह पेज बारात में चला गया</h2><p className="muted">This page went to the baraat.</p><a className="btn" href="/">घर लौटें</a></div></div>) },

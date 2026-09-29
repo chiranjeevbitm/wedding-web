@@ -1,6 +1,8 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore, ALL_EVENTS } from '../lib/store.jsx';
-import { SEASON_META, TRACKS } from '../data/journey.js';
+import { SEASON_META } from '../data/journey.js';
+import { CATS } from '../data/cats.js';
 import { daysUntil, fmtDate, t } from '../lib/format.js';
 import { Chip, FolkBorder, Section } from '../components/ui.jsx';
 
@@ -41,30 +43,61 @@ export default function Home() {
           </div>
         </div>
 
-        <Section icon="🌼" title={lang === 'hi' ? 'परिवार का मौसम' : 'Family season'} sub={lang === 'hi' ? '4 पड़ाव · टैप करके खोलें' : '4 tracks · tap to open'} count={TRACKS.length} defaultOpen>
+        <Section icon="🌼" title={lang === 'hi' ? 'परिवार का मौसम' : 'Family season'} sub={lang === 'hi' ? '3 शादियाँ · टैप करके खोलें' : '3 chapters · tap to open'} count={CATS.length} defaultOpen>
           <div className="grid two">
-            {TRACKS.map(tr => (
+            {CATS.map(tr => (
               <Link key={tr.id} to="/journey" style={{ textDecoration: 'none', color: 'inherit' }}>
                 <div className={`card press ${tr.tint}`} style={{ margin: 0 }}>
                   <div style={{ fontSize: 26 }}>{tr.icon}</div>
                   <h3>{lang === 'hi' ? tr.hi : tr.en}</h3>
-                  <div className="small muted">{t(tr.line, lang)}</div>
-                  <div className="small">{tr.start} → {tr.end}</div>
+                  <div className="small">{tr.range}</div>
                 </div>
               </Link>
             ))}
           </div>
         </Section>
 
+        <Section icon="💌" title={lang === 'hi' ? 'शुभकामना लिखें' : 'Write a wish'} sub={lang === 'hi' ? 'दीपक × अल्का के लिए' : 'For Deepak × Alka'} defaultOpen={false} tint="tint-wedding">
+          <WishBox />
+        </Section>
+
         <Section icon="✓" title={lang === 'hi' ? 'तैयारी' : 'Preparation'} sub={`${done}/${state.items.length}`} count={`${state.items.length ? Math.round(done / state.items.length * 100) : 0}%`} defaultOpen={false} tint="tint-wedding">
           <div className="progress"><i style={{ width: `${state.items.length ? Math.round(done / state.items.length * 100) : 0}%` }} /></div>
           <div className="row" style={{ marginTop: 10 }}>
             <Link className="btn small press" to="/checklist">{lang === 'hi' ? 'चेकलिस्ट खोलें' : 'Open checklist'}</Link>
-            <Link className="btn small ghost press" to="/rsvp">RSVP · {lang === 'hi' ? 'शुभकामना' : 'Wishes'}</Link>
+            <Link className="btn small ghost press" to="/more">{lang === 'hi' ? 'फ़ीडबैक' : 'Feedback'}</Link>
           </div>
         </Section>
         <p className="small muted">~ {lang === 'hi' ? 'वाली तारीख़ें पक्की नहीं — पंडित जी/परिवार से पुष्टि करें।' : 'Dates marked ~ are not final — confirm with pandit/family.'}</p>
       </div>
     </>
+  );
+}
+
+function WishBox() {
+  const { state, addWish } = useStore();
+  const lang = state.lang;
+  const [name, setName] = useState('');
+  const [msg, setMsg] = useState('');
+  const [sent, setSent] = useState('');
+  const [list, setList] = useState(state.wishes || []);
+  useEffect(() => { setList(state.wishes || []); }, [state.wishes]);
+  useEffect(() => {
+    fetch('/api/wishes').then(r => r.ok ? r.json() : null).then(d => {
+      if (d && Array.isArray(d.wishes) && d.wishes.length) setList(d.wishes);
+    }).catch(() => {});
+  }, []);
+  return (
+    <div>
+      <div className="addrow">
+        <input value={name} onChange={e => setName(e.target.value)} placeholder={lang === 'hi' ? 'नाम' : 'Name'} aria-label="name" />
+      </div>
+      <div className="addrow" style={{ marginTop: 8 }}>
+        <input value={msg} onChange={e => setMsg(e.target.value)} onKeyDown={e => e.key === 'Enter' && msg.trim() && (addWish({ name: name.trim() || (lang === 'hi' ? 'अज्ञात' : 'Anonymous'), message: msg.trim() }), setMsg(''), setSent(lang === 'hi' ? 'भेज दिया 💛' : 'Sent 💛'), setTimeout(() => setSent(''), 1800))} placeholder={lang === 'hi' ? 'शुभकामना लिखें…' : 'Write a wish…'} aria-label="wish" />
+        <button className="btn small press" onClick={() => { if (!msg.trim()) return; addWish({ name: name.trim() || (lang === 'hi' ? 'अज्ञात' : 'Anonymous'), message: msg.trim() }); setMsg(''); setSent(lang === 'hi' ? 'भेज दिया 💛' : 'Sent 💛'); setTimeout(() => setSent(''), 1800); }}>{lang === 'hi' ? 'भेजें' : 'Send'}</button>
+      </div>
+      {sent && <p className="small pop" style={{ color: 'var(--mehendi)' }}>{sent}</p>}
+      {list.slice(0, 3).map(x => <div key={x.id || x.message} className="tl-row pop" style={{ marginTop: 8 }}><b>{x.name}</b><div className="small">{x.message}</div></div>)}
+    </div>
   );
 }

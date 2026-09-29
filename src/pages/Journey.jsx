@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useStore, ALL_EVENTS } from '../lib/store.jsx';
-import { CLUSTERS, EXCURSION } from '../data/events-b.js';
+import { EXCURSION } from '../data/events-b.js';
 import { HOME_BASE, SEASON_META } from '../data/journey.js';
+import { CATS, catOf } from '../data/cats.js';
 import { fmtDate, t } from '../lib/format.js';
 import { Chip, Section } from '../components/ui.jsx';
 
@@ -9,24 +10,19 @@ export default function Journey() {
   const { state } = useStore();
   const lang = state.lang;
   const sorted = [...ALL_EVENTS].sort((a, b) => a.date.localeCompare(b.date));
-  const groups = [
-    { id: 'chhath', hi: 'छठ पूजा', en: 'Chhath Puja', icon: '☀' },
-    { id: 'cousin', hi: 'कज़न की शादी', en: "Cousin's wedding", icon: '🪔' },
-    { id: 'bridge', hi: 'तैयारी', en: 'Preparation', icon: '🧳' },
-    { id: 'wedding', hi: 'भाई की शादी', en: "Brother's wedding", icon: '🌼' },
-  ];
   return (
     <div className="wrap">
       <Section icon="🏠" title={t(HOME_BASE.title, lang)} sub={lang === 'hi' ? 'मुज़फ़्फ़रपुर · पूरा मौसम' : 'Muzaffarpur · whole season'} defaultOpen tint="tint-wedding">
         <p>{t(HOME_BASE.body, lang)}</p>
         <p className="small">⚡ Delhi 30 Nov → 3 Dec · {(EXCURSION.personIds || []).join(', ')} · <span className="muted">{t(EXCURSION.note, lang)}</span></p>
       </Section>
-      <h2 style={{ marginTop: 18 }}>⋮ {lang === 'hi' ? 'पूरा सफ़र — एक कहानी' : 'Full journey — one story'}</h2>
-      {groups.map((g, gi) => {
-        const evs = sorted.filter(e => e.track === g.id);
+      <h2 style={{ marginTop: 18 }}>⋮ {lang === 'hi' ? 'पूरा सफ़र — 3 पड़ाव' : 'Full journey — 3 chapters'}</h2>
+      {CATS.map((g, gi) => {
+        const evs = sorted.filter(e => catOf(e.track) === g.id);
         if (!evs.length) return null;
+        const dates = evs.map(e => e.date).sort();
         return (
-          <Section key={g.id} icon={g.icon} title={lang === 'hi' ? g.hi : g.en} count={evs.length} defaultOpen={gi >= 1} tint={g.id === 'wedding' ? 'tint-wedding' : g.id === 'chhath' ? 'tint-chhath' : g.id === 'cousin' ? 'tint-cousin' : 'tint-bridge'}>
+          <Section key={g.id} icon={g.icon} title={lang === 'hi' ? g.hi : g.en} sub={`${dates[0]} → ${dates[dates.length - 1]}`} count={evs.length} defaultOpen={gi > 0} tint={g.tint}>
             <div className="timeline">
               {evs.map(e => (
                 <div key={e.id} className="tl-row pop">
@@ -40,9 +36,6 @@ export default function Journey() {
           </Section>
         );
       })}
-      <Section icon="🪔" title={t(CLUSTERS[0].title, lang)} defaultOpen={false} tint="tint-cousin">
-        {CLUSTERS[0].known.map(k => <div key={k.date} className="small">· {k.date} — {t(k.label, lang)}</div>)}
-      </Section>
       <p className="small muted">{SEASON_META.season.start} → {SEASON_META.season.end} · 16 Dec {lang === 'hi' ? 'से खरमास — कोई शुभ काम नहीं' : 'Kharmas begins — nothing shubh'}</p>
     </div>
   );
