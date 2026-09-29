@@ -2,7 +2,7 @@
   "name": "ghar-ki-shaadi",
   "private": true,
   "version": "1.0.0",
-  "description": "Ghar Ki Shaadi — Dr Deepak x Alka family-season planner (Muzaffarpur, 13 Nov - 13 Dec 2026)",
+  "description": "Ghar Ki Shaadi — Dr Deepak x Salvi family-season planner (Muzaffarpur, 13 Nov - 13 Dec 2026)",
   "type": "module",
   "scripts": {
     "dev": "vite",

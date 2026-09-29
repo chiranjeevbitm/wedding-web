@@ -10,14 +10,14 @@ export default function About() {
       <h2>🙏 {lang === 'hi' ? 'हमारे बारे में' : 'About'}</h2>
       <div className="card tint-wedding">
         <div style={{ fontSize: 44, textAlign: 'center' }}>🤵👰</div>
-        <h3 style={{ textAlign: 'center' }}>Dr. Deepak Kumar × Alka</h3>
+        <h3 style={{ textAlign: 'center' }}>Dr. Deepak Kumar × {SEASON_META.bride.name}</h3>
         <p style={{ textAlign: 'center' }} className="muted">{lang === 'hi' ? 'आज वे डॉक्टर नहीं, दूल्हा हैं।' : 'Today he is not the doctor — he is the groom.'}</p>
         <div className="row" style={{ justifyContent: 'center' }}>
           <a className="btn small ghost" href={SEASON_META.groom.profileUrl} target="_blank" rel="noreferrer">{lang === 'hi' ? 'दूल्हे की प्रोफ़ाइल' : "Groom's profile"}</a>
         </div>
       </div>
       <div className="card tint-cousin">
-        <h3>🪔 Guvav × Alka · 2 Dec · Delhi</h3>
+        <h3>🪔 {SEASON_META.cousinCouple.groom.name} × {SEASON_META.cousinCouple.bride.name} · 2 Dec · Delhi</h3>
         <p className="small muted">{lang === 'hi' ? 'ममेरे भाई की शादी — मौसम का दूसरा उत्सव।' : "The cousin's wedding — the season's other celebration."}</p>
       </div>
       <div className="card">

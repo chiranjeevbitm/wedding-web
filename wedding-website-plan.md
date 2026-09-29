@@ -1,7 +1,7 @@
 # 02 · Wedding Website — Detailed Build Plan
 
 > **Working title in-product:** घर की शादी · *Ghar Ki Shaadi*
-> **Subtitle:** **Dr Deepak × Alka** · Muzaffarpur · 7–13 Dec 2026 · *cousin: **Gurvav × Alka**, 2 Dec, Delhi*
+> **Subtitle:** **Dr Deepak × Salvi** · Muzaffarpur · 7–13 Dec 2026 · *cousin: **Gurvav × Alka**, 2 Dec, Delhi*
 > **Tagline:** एक शादी नहीं, पूरे परिवार की कहानी। — *Not one wedding. A whole family's story.*
 > **Stack:** React + Vite · plain CSS · hand-drawn inline SVG · localStorage · PWA · deployed on Vercel
 > **Hard constraint:** frontend only, no backend, no database, no login in v1. Target < 80 KB gzipped JS.
@@ -332,7 +332,7 @@ Every screen must answer five questions in this order: **Where am I? · What's n
 
 **Content blocks, in order:**
 
-1. **Hero** — blessing glyph ॐ, working title, `Deepak × Alka`, `मुज़फ़्फ़रपुर · Muzaffarpur`, date range. Decorated with the `MadhubaniBorder` SVG component at 8 % opacity.
+1. **Hero** — blessing glyph ॐ, working title, `Deepak × Salvi`, `मुज़फ़्फ़रपुर · Muzaffarpur`, date range. Decorated with the `MadhubaniBorder` SVG component at 8 % opacity.
 2. **Countdown card** — shows **two numbers** because the season has three chapters:
    - primary: days to the **next milestone** (labelled with what it is: "छठ शुरू" / "कज़न की शादी" / "गीत शुरू" / "शादी")
    - secondary: days to **11 Dec (शादी)**, kept small and quiet
@@ -1797,7 +1797,7 @@ These block or shape specific screens. Each one is numbered so it can be answere
 
 | # | Decision | Blocks | Recommendation | **v1.1 status** |
 | --- | --- | --- | --- | --- |
-| **K1** | **Bride's name** (and whether to show it at all) | Home hero, About | ~~Leave blank and render `[दुल्हन का नाम]` until given~~ | ✅ **RESOLVED — brother's bride **Alka**, cousin's bride **Alka** (as supplied). Home hero becomes "Deepak × Alka"; the cousin card reads "Gurvav × Alka". Correct any spelling in `SEASON_META` only, once, and it propagates everywhere |
+| **K1** | **Bride's name** (and whether to show it at all) | Home hero, About | ~~Leave blank and render `[दुल्हन का नाम]` until given~~ | ✅ **RESOLVED — brother's bride **Salvi**, cousin's bride **Alka** (as supplied). Home hero becomes "Deepak × Salvi"; the cousin card reads "Gurvav × Alka". Correct any spelling in `SEASON_META` only, once, and it propagates everywhere |
 | **K2** | ~~Cousin's wedding city, dates, and which cousin~~ | The cluster's unknown block, Travel & Stay | ~~Ship the cluster with `?` rows; fill in as soon as the family knows~~ | ✅ **RESOLVED — Delhi, 2 Dec, maternal cousin brother, travel 30 Nov → 3 Dec, 4 named people. Ship as `confirmed`** |
 | **K3** | **Family's Chhath ghat + who fasts + prasad quantities** | Chhath module | Ship the Ghat Plan empty; the family fills it in the app | open |
 | **K4** | **Who can edit**: just the user, or the whole family? | Share-link + export/import design | Recommended: everyone edits their own copy; the user's copy is the master, distributed via share link | open |
@@ -1828,7 +1828,7 @@ Canonical UI strings. **Ritual names always show Devanagari + Roman together.**
 ```js
 export const S = {
   app:        { hi:'घर की शादी',            en:'Ghar Ki Shaadi' },
-  couple:     { hi:'डॉ. दीपक × अल्का',        en:'Dr. Deepak × Alka' },
+  couple:     { hi:'डॉ. दीपक × सल्वी',        en:'Dr. Deepak × Salvi' },
   cousinCouple:{ hi:'गुवाव × अल्का',         en:'Gurvav × Alka' },
   tagline:    { hi:'एक शादी नहीं, पूरे परिवार की कहानी।', en:"Not one wedding — a whole family's story." },
 
@@ -2069,7 +2069,7 @@ After Commit 5 the app is **already useful** — which matters, because Chhath i
 
 | Answer | Immediate action |
 | --- | --- |
-| Bride's name | ✅ resolved — Alka (brother), Alka (cousin) — already in `SEASON_META` |
+| Bride's name | ✅ resolved — Salvi (brother), Alka (cousin) — already in `SEASON_META` |
 | Cousin's wedding venue/dates | ✅ resolved — **Gurvav × Alka, 2 Dec, Delhi** — mark the cluster `confirmed` |
 | Chhath ghat / who fasts | These are **app-entered**, not seed-entered — send the link and ask them to fill it in |
 | Who can edit | Decide between share-link-only (recommended) vs a Phase 4 sync backend |

@@ -1,6 +1,6 @@
 # ghar-ki-shaadi (from wedding-web folder)
 
-Bilingual family-season planner: Chhath (13–16 Nov) → cousin's wedding (27 Nov–3 Dec, Delhi 2 Dec) → Deepak × Alka (7–13 Dec), Muzaffarpur.
+Bilingual family-season planner: Chhath (13–16 Nov) → cousin's wedding (27 Nov–3 Dec, Delhi 2 Dec) → Deepak × Salvi (7–13 Dec), Muzaffarpur.
 
 ## Run
 npm install

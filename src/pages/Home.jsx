@@ -22,7 +22,7 @@ export default function Home() {
       <section className="hero">
         <div className="om">ॐ</div>
         <h1><span className="hi">{lang === 'hi' ? SEASON_META.title.hi : SEASON_META.title.en}</span></h1>
-        <div className="couple">Dr Deepak × Alka</div>
+        <div className="couple">Dr Deepak × {SEASON_META.bride.name}</div>
         <p className="place">{lang === 'hi' ? `${SEASON_META.place.hi} · ${SEASON_META.place.note.hi}` : `${SEASON_META.place.city} · ${SEASON_META.place.note.en}`}</p>
         <div><span className="dates">{lang === 'hi' ? '07 — 13 दिसंबर 2026 · मुज़फ़्फ़रपुर' : '07 — 13 December 2026 · Muzaffarpur'}</span></div>
         <p className="tagline">{t(SEASON_META.tagline, lang)}</p>
@@ -57,7 +57,7 @@ export default function Home() {
           </div>
         </Section>
 
-        <Section icon="💌" title={lang === 'hi' ? 'शुभकामना लिखें' : 'Write a wish'} sub={lang === 'hi' ? 'दीपक × अल्का के लिए' : 'For Deepak × Alka'} defaultOpen={false} tint="tint-wedding">
+        <Section icon="💌" title={lang === 'hi' ? 'शुभकामना लिखें' : 'Write a wish'} sub={lang === 'hi' ? `दीपक × ${SEASON_META.bride.hi} के लिए` : `For Deepak × ${SEASON_META.bride.name}`} defaultOpen={false} tint="tint-wedding">
           <WishBox />
         </Section>
 

@@ -258,7 +258,7 @@ This is the single consolidated truth table. Everything else in this dossier is 
 | **8 Dec** | **Tue** | MFP — home | **हनुमान आराधना + गीत** (morning / evening) | `confirmed` |
 | **9 Dec** | **Wed** | MFP — home | **हल्दी + मेहंदी + गीत** | `confirmed` |
 | **10 Dec** | **Thu** | MFP — home | **संगीत + मटकोर** | date `confirmed` · ordering `tentative` |
-| **11 Dec** | **Fri** | MFP | **बारात + शादी — डॉ. दीपक वेड्स अल्का** | date `confirmed` · muhurat `toVerify` |
+| **11 Dec** | **Fri** | MFP | **बारात + शादी — डॉ. दीपक वेड्स सल्वी** | date `confirmed` · muhurat `toVerify` |
 | **12 Dec** | **Sat** | MFP | **वापसी + टोकरीवाला + रिश्तेदारों की विदाई** | concept `confirmed` · content `toVerify` |
 | **13 Dec** | **Sun** | MFP | **रिसेप्शन** | `confirmed` |
 
@@ -319,7 +319,7 @@ This is the single consolidated truth table. Everything else in this dossier is 
 
 ### 5.5 What is *not* in the ledger (and must not be fabricated)
 
-- Bride's name **— now known: Alka (brother) and Alka (cousin), as supplied** · family/village · side of the wedding (the cousin's).
+- Bride's name **— now known: Salvi (brother) and Alka (cousin), as supplied** · family/village · side of the wedding (the cousin's).
 - Cousin's wedding venue and the cousin's name.
 - The family's Chhath ghat, who fasts, who cooks the prasad.
 - The vivah muhurat, baraat departure/return times, jaimala time.
@@ -1343,7 +1343,7 @@ export const SEASON_META = {
   couple: {
     groom: { name:'Dr. Deepak Kumar', hi:'डॉ. दीपक कुमार',
              profileUrl:'https://doctors-profile-chi.vercel.app/' },
-    bride: { name:'Alka', hi:'अल्का', status:'confirmed' }   // ← supplied by the family
+    bride: { name:'Salvi', hi:'सल्वी', status:'confirmed' }   // ← corrected by family 29 Sep 2026 (Alka is cousin's mangetar)
   },
   cousinCouple: {                       // 2 Dec 2026, Delhi
     groom: { name:'Gurvav', hi:'गुवाव' },

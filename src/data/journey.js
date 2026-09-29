@@ -14,7 +14,7 @@ export const SEASON_META = {
   title: { hi: 'घर की शादी', en: 'Ghar Ki Shaadi' },
   tagline: { hi: 'एक शादी नहीं, पूरे परिवार की कहानी।', en: "Not one wedding — a whole family's story." },
   groom: { name: 'Dr. Deepak Kumar', hi: 'डॉ. दीपक कुमार', profileUrl: 'https://doctors-profile-chi.vercel.app/' },
-  bride: { name: 'Alka', hi: 'अल्का', status: 'confirmed' },
+  bride: { name: 'Salvi', hi: 'सल्वी', status: 'confirmed' },
   cousinCouple: { groom: { name: 'Gurvav', hi: 'गुवाव' }, bride: { name: 'Alka', hi: 'अल्का' }, date: '2026-12-02', place: 'Delhi' },
   family: [
     { id: 'chiranjeev', name: 'Chiranjeev', hi: 'चिरंजीव', relation: { hi: 'स्वयं', en: 'Self' }, profession: { hi: 'सीनियर AI इंजीनियर', en: 'Senior AI engineer' } },
