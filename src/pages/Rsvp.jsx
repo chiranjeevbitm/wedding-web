@@ -70,10 +70,10 @@ export default function Rsvp() {
         </div>
       </div>
 
-      <div className="card tint-wedding">
+      <div className="card tint-wedding pop">
         <h3>💛 {lang === 'hi' ? 'शुभकामनाएँ' : 'Wishes'} ({wishes.length})</h3>
         {wishes.length === 0 && <p className="muted small">{lang === 'hi' ? 'अभी कोई शुभकामना नहीं — पहली आप लिखिए।' : 'No wishes yet — write the first one.'}</p>}
-        {wishes.map(x => <div key={x.id || x.message} style={{ padding: '8px 0', borderBottom: '1px solid var(--line)' }}><b>{x.name}</b><div>{x.message}</div></div>)}
+        {wishes.map(x => <div key={x.id || x.message} className="tl-row pop" style={{ marginBottom: 8 }}><b>{x.name}</b><div>{x.message}</div></div>)}
         {state.rsvp?.length > 0 && <p className="small muted" style={{ marginTop: 10 }}>RSVP: {state.rsvp.length} {lang === 'hi' ? 'जवाब' : 'responses'}</p>}
       </div>
     </div>
