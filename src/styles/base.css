@@ -1,0 +1,23 @@
+/* Base reset + wedding typography. Plain CSS, no framework. */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--ivory);
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+h1, h2, h3 { font-family: var(--font-display); color: var(--maroon); margin: 0 0 0.4em; line-height: 1.2; }
+h1 .hi, h2 .hi { font-family: var(--font-dev); }
+a { color: var(--maroon); }
+img, svg { max-width: 100%; }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--haldi); outline-offset: 2px; border-radius: 6px; }
+.skip { position: absolute; left: -999px; top: 0; background: var(--maroon); color: #fff; padding: 10px 16px; z-index: 99; border-radius: 0 0 10px 0; }
+.skip:focus { left: 0; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

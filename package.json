@@ -1,0 +1,24 @@
+{
+  "name": "ghar-ki-shaadi",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Ghar Ki Shaadi — Dr Deepak x Alka family-season planner (Muzaffarpur, 13 Nov - 13 Dec 2026)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "db:init": "node scripts/init-db.mjs"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
+    "dotenv": "^16.4.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11"
+  }
+}

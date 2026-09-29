@@ -1,0 +1,40 @@
+/* Ghar Ki Shaadi — design tokens (plan §6). All colours / fonts / spacing live here. */
+:root {
+  --ivory: #FBF8F1;
+  --ivory-deep: #F4EEE2;
+  --ink: #292522;
+  --ink-soft: #5B534A;
+  --line: #E3D9C6;
+  --maroon: #7A2633;
+  --sindoor: #B33A3A;
+  --haldi: #D89B32;
+  --marigold: #E9A93B;
+  --mehendi: #5C7350;
+  --river: #3E6B8A;
+  --saffron: #E07B39;
+
+  --tint-chhath: #FFF6E8;
+  --tint-cousin: #FDF1EC;
+  --tint-bridge: #F3F1EC;
+  --tint-wedding: #FFF9EF;
+  --tint-devotional: #FFF4E4;
+  --tint-haldi: #FAF7E2;
+  --tint-sangeet: #FDF3E0;
+  --tint-shaadi: #FCEEE9;
+  --tint-vidai: #F2F4EE;
+  --tint-reception: #FBF6EC;
+
+  --ok-bg: #EFF3EA;
+  --tent-bg: #FDF5E4;
+  --verify-bg: #FFF8E7;
+
+  --font-display: "Cormorant Garamond", "Noto Serif Devanagari", Georgia, serif;
+  --font-dev: "Noto Serif Devanagari", "Cormorant Garamond", Georgia, serif;
+  --font-body: "Inter", "Noto Sans Devanagari", system-ui, sans-serif;
+
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --shadow: 0 8px 30px rgba(122, 38, 51, 0.10);
+  --maxw: 1060px;
+}

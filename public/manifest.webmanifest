@@ -1,0 +1,9 @@
+{
+  "name": "घर की शादी · Ghar Ki Shaadi",
+  "short_name": "Shaadi",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FBF8F1",
+  "theme_color": "#7A2633",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
