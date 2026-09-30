@@ -11,7 +11,8 @@
     "db:init": "node scripts/init-db.mjs",
     "check:gate": "node scripts/check-gate.mjs",
     "check:sync": "node scripts/check-sync.mjs",
-    "check:all": "npm run check:gate && npm run check:sync && npm run check:auth",
+    "check:order": "node scripts/check-order.mjs",
+    "check:all": "npm run check:gate && npm run check:sync && npm run check:order && npm run check:auth",
     "check:auth": "esbuild scripts/check-auth.jsx --bundle --platform=node --format=esm --jsx=automatic --outfile=node_modules/.cache/check-auth.mjs --log-level=error && node node_modules/.cache/check-auth.mjs"
   },
   "dependencies": {

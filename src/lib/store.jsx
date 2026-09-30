@@ -8,13 +8,12 @@
 //     forever; we now write the first row ourselves.
 //   * localStorage stays as offline cache/fallback.
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { CHHATH_EVENTS, COUSIN_EVENTS, BRIDGE_EVENTS } from '../data/events-a.js';
-import { WEDDING_EVENTS } from '../data/events-b.js';
+import { ALL_EVENTS } from '../data/all-events.js';
 import { KITS } from '../data/kits.js';
 import { catOf } from '../data/cats.js';
 import { decide } from './sync.js';
 
-export const ALL_EVENTS = [...CHHATH_EVENTS, ...COUSIN_EVENTS, ...BRIDGE_EVENTS, ...WEDDING_EVENTS];
+export { ALL_EVENTS };
 const KEY = 'ghar-ki-shaadi-v2';
 const PULL_MS = 15000;
 const PUSH_MS = 700;
