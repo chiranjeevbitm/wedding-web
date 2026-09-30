@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { StoreProvider } from './lib/store.jsx';
 import { router } from './app/routes.jsx';
-import { lock } from './lib/gate.js';
+import { lock, isUnlocked, touch } from './lib/gate.js';
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/app.css';
@@ -14,28 +14,26 @@ import './styles/gate.css';
 function Root() {
   const [, force] = React.useReducer((x) => x + 1, 0);
   React.useEffect(() => {
-    const toggle = () => {
-      try {
-        const raw = localStorage.getItem('ghar-ki-shaadi-v2');
-        const s = raw ? JSON.parse(raw) : {};
-        localStorage.setItem(
-          'ghar-ki-shaadi-v2',
-          JSON.stringify({ ...s, lang: s.lang === 'hi' ? 'en' : 'hi' })
-        );
-      } catch {
-        /* noop */
-      }
-      force();
-      window.location.reload();
-    };
-    window.addEventListener('shaadi:lang', toggle);
-    window.addEventListener('shaadi:lock', () => {
+    const doLock = () => {
       lock();
-      window.location.reload();
-    });
+      window.location.replace('/login');
+    };
+
+    // Keep the session alive only while the user is actually interacting.
+    const activity = ['pointerdown', 'keydown', 'wheel', 'touchstart'];
+    activity.forEach((t) => window.addEventListener(t, touch, { passive: true }));
+
+    // Expire after the idle window (see SESSION_IDLE_MS) — 4 min.
+    const timer = setInterval(() => {
+      if (!isUnlocked() && !window.location.pathname.startsWith('/login')) doLock();
+    }, 3000);
+
+    window.addEventListener('shaadi:lock', doLock);
+
     return () => {
-      window.removeEventListener('shaadi:lang', toggle);
-      window.removeEventListener('shaadi:lock', () => {});
+      activity.forEach((t) => window.removeEventListener(t, touch));
+      clearInterval(timer);
+      window.removeEventListener('shaadi:lock', doLock);
     };
   }, []);
   return (

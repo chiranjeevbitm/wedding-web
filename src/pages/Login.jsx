@@ -3,26 +3,23 @@ import { useNavigate } from 'react-router-dom';
 import { useStore } from '../lib/store.jsx';
 import { SEASON_META } from '../data/journey.js';
 import { t } from '../lib/format.js';
-import { checkPin, countdownParts, isUnlocked, kolkataClock, pinCandidates, unlock } from '../lib/gate.js';
+import { checkPin, countdownParts, isUnlocked, unlock } from '../lib/gate.js';
 
 // Full-screen gate: login-page-video.mp4 behind, live countdown centre,
-// PIN box a little above the bottom. Password = current Kolkata time (12-hr).
+// PIN box a little above the bottom.
+// NO hints anywhere: no clock, no sample PIN, no "correct PIN was …" —
+// a wrong attempt only ever says it was wrong (request: never reveal PIN).
 export default function Login() {
-  const { state } = useStore();
+  const { state, setLang } = useStore();
   const lang = state.lang;
   const nav = useNavigate();
   const [pin, setPin] = useState('');
   const [err, setErr] = useState('');
   const [okMsg, setOkMsg] = useState('');
-  const [now, setNow] = useState(() => new Date());
   const [cd, setCd] = useState(() => countdownParts('2026-12-11'));
 
   useEffect(() => {
-    const id = setInterval(() => {
-      const d = new Date();
-      setNow(d);
-      setCd(countdownParts('2026-12-11', d));
-    }, 1000);
+    const id = setInterval(() => setCd(countdownParts('2026-12-11', new Date())), 1000);
     return () => clearInterval(id);
   }, []);
 
@@ -38,12 +35,8 @@ export default function Login() {
       unlock();
       setTimeout(() => nav('/', { replace: true }), 450);
     } else {
-      const [p12, p24] = pinCandidates();
-      setErr(
-        lang === 'hi'
-          ? `गलत PIN — अभी कोलकाता समय ${kolkataClock()} है। ${p12} (या 24-घंटे में ${p24}) डालें।`
-          : `Wrong PIN — Kolkata time is ${kolkataClock()}. Enter ${p12} (or ${p24} in 24-hr).`
-      );
+      // Deliberately opaque — never echoes the accepted value.
+      setErr(lang === 'hi' ? 'गलत PIN — दोबारा कोशिश करें।' : 'Wrong PIN — please try again.');
       setPin('');
     }
   };
@@ -88,10 +81,6 @@ export default function Login() {
       </div>
 
       <div className="gate-pin">
-        <div className="gate-pin-title">
-          {lang === 'hi' ? '🔑 अभी का समय = PIN' : '🔑 Current time = PIN'}
-          <span className="gate-clock">{kolkataClock(now)} IST</span>
-        </div>
         <input
           className="gate-input"
           type="password"
@@ -111,17 +100,9 @@ export default function Login() {
         <button className="btn gate-go press" onClick={() => go()}>
           {lang === 'hi' ? 'अंदर जाएँ →' : 'Enter →'}
         </button>
-        <p className="gate-hint">
-          {(() => {
-            const [p12, p24] = pinCandidates(now);
-            return lang === 'hi'
-              ? `अभी का PIN: ${p12} या ${p24} (24-घंटे) — तीन अंक भी चलेंगे, जैसे ${p12.replace(/^0/, '')}`
-              : `PIN now: ${p12} or ${p24} (24-hr) — 3 digits also work, e.g. ${p12.replace(/^0/, '')}`;
-          })()}
-        </p>
         {err && <p className="gate-err pop">{err}</p>}
         {okMsg && <p className="gate-ok pop">{okMsg}</p>}
-        <button className="gate-lang" onClick={() => (window.location.hash = '#lang', window.dispatchEvent(new Event('shaadi:lang')))}>
+        <button className="gate-lang" onClick={() => setLang(lang === 'hi' ? 'en' : 'hi')}>
           {lang === 'hi' ? 'EN' : 'हिं'}
         </button>
       </div>

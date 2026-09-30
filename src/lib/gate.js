@@ -1,10 +1,17 @@
 // Kolkata-time PIN gate.
 // Password = current time in Asia/Kolkata, 12-hr clock, HHMM digits.
-// Accepts: "0123" or "123" (for 01:23), "1159"/"1159" etc. — leading zero optional,
-// and 3-digit input is left-padded before compare. Seconds are ignored.
+// Accepts: "0123" or "123" (for 01:23), "1323" (24-hr), leading zero optional.
+//
+// Session rules (requested):
+//   * in-memory only — a page refresh ALWAYS asks for the PIN again
+//   * idle timeout — 4 minutes without activity locks the app again
 
 export const KOLKATA_TZ = 'Asia/Kolkata';
-const GATE_KEY = 'ghar-ki-shaadi-gate-v1';
+export const SESSION_IDLE_MS = 4 * 60 * 1000;
+
+// Module-level state = wiped by any reload, so refresh always re-asks.
+let unlockedAt = 0;
+let lastActivity = 0;
 
 const kolkataParts = (d = new Date()) => {
   const fmt = new Intl.DateTimeFormat('en-US', {
@@ -82,26 +89,33 @@ export const countdownParts = (targetISO, d = new Date()) => {
   };
 };
 
-export const isUnlocked = () => {
-  try {
-    return sessionStorage.getItem(GATE_KEY) === 'open';
-  } catch {
+// ---- session (in-memory, idle-limited) ----
+
+export const unlock = (now = Date.now()) => {
+  unlockedAt = now;
+  lastActivity = now;
+};
+
+export const touch = (now = Date.now()) => {
+  if (unlockedAt) lastActivity = now;
+};
+
+export const isUnlocked = (now = Date.now()) => {
+  if (!unlockedAt) return false;
+  if (now - lastActivity >= SESSION_IDLE_MS) {
+    unlockedAt = 0;
+    lastActivity = 0;
     return false;
   }
+  return true;
 };
 
-export const unlock = () => {
-  try {
-    sessionStorage.setItem(GATE_KEY, 'open');
-  } catch {
-    /* private mode — gate simply re-asks next load */
-  }
-};
+// Milliseconds left before the idle timeout (0 when locked).
+export const msLeft = (now = Date.now()) =>
+  unlockedAt ? Math.max(0, SESSION_IDLE_MS - (now - lastActivity)) : 0;
 
 export const lock = () => {
-  try {
-    sessionStorage.removeItem(GATE_KEY);
-  } catch {
-    /* noop */
-  }
+  unlockedAt = 0;
+  lastActivity = 0;
 };
+

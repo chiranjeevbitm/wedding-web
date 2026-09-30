@@ -4,21 +4,28 @@ import { useStore } from '../lib/store.jsx';
 import { Section } from '../components/ui.jsx';
 
 export default function More() {
-  const { state, setLang, addFeedback, cloud } = useStore();
+  const { state, setLang, addFeedback, mergeServer, cloud } = useStore();
   const lang = state.lang;
   const [name, setName] = useState('');
   const [msg, setMsg] = useState('');
   const [sent, setSent] = useState('');
-  const [list, setList] = useState(state.feedback || []);
-  useEffect(() => { setList(state.feedback || []); }, [state.feedback]);
+  const list = state.feedback || [];
+
+  // Poll every 15 s so feedback posted by anyone else shows up here too.
   useEffect(() => {
-    fetch('/api/feedback').then(r => r.ok ? r.json() : null).then(d => {
-      if (d && Array.isArray(d.feedback) && d.feedback.length) setList(d.feedback);
-    }).catch(() => {});
-    fetch('/api/wishes').then(r => r.ok ? r.json() : null).then(d => {
-      if (d && Array.isArray(d.wishes) && d.wishes.length) setList(cur => (cur.length ? cur : d.wishes));
-    }).catch(() => {});
-  }, []);
+    let alive = true;
+    const pull = async () => {
+      try {
+        const r = await fetch('/api/feedback');
+        if (!r.ok) return;
+        const d = await r.json();
+        if (alive && Array.isArray(d.feedback)) mergeServer('feedback', d.feedback);
+      } catch { /* offline → local only */ }
+    };
+    pull();
+    const id = setInterval(pull, 15000);
+    return () => { alive = false; clearInterval(id); };
+  }, [mergeServer]);
   const send = () => {
     if (!msg.trim()) return;
     addFeedback({ name: name.trim(), message: msg.trim() });
@@ -54,11 +61,16 @@ export default function More() {
           <button className="btn small ghost press" onClick={() => setLang('en')}>EN</button></div>
         <div className="small" style={{ marginTop: 8, background: '#FFF8E7', border: '1px dashed var(--line)', borderRadius: 12, padding: '10px 12px' }}>
           {cloud === 'neon'
-            ? (lang === 'hi' ? '🟢 क्लाउड जुड़ा — यह बदलाव सबके फ़ोन पर दिखेगा।' : '🟢 Cloud connected — changes appear on every phone.')
-            : (lang === 'hi'
-              ? '⚪ सिर्फ़ इसी फ़ोन में — यानी बदलाव अभी सिर्फ़ आपके फ़ोन में सेव है, दूसरों को नहीं दिखेगा। Vercel पर DATABASE_URL डालते ही 🟢 हो जाएगा।'
-              : '⚪ This phone only — changes save just on your phone for now; others cannot see them. It turns 🟢 once DATABASE_URL is set on Vercel.')}
+            ? (lang === 'hi' ? '🟢 क्लाउड जुड़ा — आपकी हर एडिट/फ़ीडबैक सबके फ़ोन पर दिखेगी (हर 15 सेकंड में सिंक)।' : '🟢 Cloud connected — every edit and feedback reaches all phones (syncs every 15 s).')
+            : cloud === 'checking'
+              ? (lang === 'hi' ? '⏳ क्लाउड जाँच रहे हैं…' : '⏳ Checking cloud…')
+              : (lang === 'hi'
+                ? '⚪ सिर्फ़ इसी फ़ोन में — अभी बदलाव दूसरों तक नहीं पहुँच रहे। (Neon कनेक्ट होते ही 🟢 हो जाएगा।)'
+                : '⚪ This phone only — changes are not reaching others yet. It turns 🟢 once Neon connects.')}
         </div>
+        <p className="small muted" style={{ marginTop: 8 }}>
+          🔒 {lang === 'hi' ? 'सेशन: 4 मिनट की निष्क्रियता पर या पेज रिफ़्रेश होते ही फिर से PIN माँगा जाएगा।' : 'Session: PIN is asked again after 4 min idle or on page refresh.'}
+        </p>
         <div className="row" style={{ marginTop: 10 }}>
           <button className="btn small ghost press" onClick={exportJSON}>{lang === 'hi' ? 'फ़ाइल निर्यात' : 'Export'}</button>
           <button className="btn small ghost press" onClick={() => { window.dispatchEvent(new Event('shaadi:lock')); }}>{lang === 'hi' ? 'लॉक 🔒' : 'Lock 🔒'}</button>

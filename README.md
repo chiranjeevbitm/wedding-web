@@ -6,10 +6,21 @@ Bilingual family-season planner: Chhath (13–16 Nov) → cousin's wedding (27 N
 npm install
 npm run dev        # http://localhost:5173
 
-## Neon DB (optional, for RSVP / wishes / shared state)
-DATABASE_URL is in `.env` (git-ignored). Tables auto-create on first API call:
-npm run db:init    # creates rsvp, wishes, app_state
-# Local dev uses localStorage; /api/* needs `vercel dev` or a Vercel deploy.
+## Checks
+npm run check:all  # gate + sync + auth (72 assertions)
+
+## Neon DB (global sync)
+`DATABASE_URL` in `.env` (git-ignored). Tables: `app_state` (the one shared
+document), `wishes`, `feedback`. `npm run db:init` creates them.
+
+Sync: boot → PULL, then every 15 s; your edits PUSH after 700 ms. So an edit
+made on any phone shows up on every phone. On Vercel set `DATABASE_URL` as an
+env var, otherwise every phone stays local ("⚪ this phone only").
+
+## Login
+PIN = the current time in Asia/Kolkata, digits only (01:23 → `0123`; 24-hr
+`1323` and 3-digit `123` also work). Session is in-memory: a refresh asks
+again, and 4 minutes idle locks the app. No hints are shown on screen.
 
 ## Structure (simple for agents)
 src/data/   — seed truth (journey, events-a/b, kits, rituals-a/b). Edit facts here.

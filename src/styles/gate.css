@@ -30,14 +30,11 @@
 .gate-count-label { font-weight: 500; letter-spacing: .02em; color: #17110F; text-shadow: 0 1px 1px rgba(255,255,255,.5); }
 .gate-tagline { font-style: italic; opacity: .9; font-size: 13.5px; margin-top: 6px; }
 .gate-pin { margin-top: auto; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
-.gate-pin-title { font-weight: 700; display: flex; flex-direction: column; gap: 2px; }
-.gate-clock { font-size: 13px; font-weight: 600; opacity: .9; }
 /* Transparent PIN box — only the border is visible, no fill, no colon. */
 .gate-input { width: 100%; margin-top: 14px; background: transparent; border: 2px solid rgba(255,247,232,.85); border-radius: 16px; color: #FFF7E8; text-align: center; font-size: 28px; font-weight: 700; letter-spacing: .6em; text-indent: .6em; padding: 14px 12px; min-height: 60px; }
 .gate-input::placeholder { color: rgba(255,247,232,.55); letter-spacing: .1em; text-indent: 0; font-size: 16px; font-weight: 500; }
 .gate-input:focus { outline: none; border-color: var(--marigold); box-shadow: 0 0 0 3px rgba(233,169,59,.35); background: transparent; }
 .gate-go { width: 100%; margin-top: 12px; background: linear-gradient(90deg, var(--maroon), var(--sindoor)); box-shadow: 0 10px 30px rgba(0,0,0,.4); }
-.gate-hint { font-size: 12.5px; opacity: .85; margin: 8px 0 0; }
 .gate-err { background: rgba(179,58,58,.9); border-radius: 12px; padding: 10px 12px; font-size: 13.5px; margin: 10px 0 0; }
 .gate-ok { background: rgba(92,115,80,.92); border-radius: 12px; padding: 10px 12px; font-size: 13.5px; margin: 10px 0 0; }
 .gate-lang { margin-top: 10px; border: 1.5px solid rgba(255,247,232,.5); background: transparent; color: #FFF7E8; border-radius: 999px; padding: 8px 18px; font-weight: 700; min-height: 44px; }

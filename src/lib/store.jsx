@@ -1,12 +1,23 @@
-// Store: localStorage first, Neon (via /api/state) when available. One context.
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+// Shared-state sync with Neon.
+//
+// What the family asked for ("edits must reach everyone"):
+//   * ONE shared document in `app_state` — last write wins (updatedAt).
+//   * PULL once at boot, then every 15 s → other people's edits arrive.
+//   * PUSH debounced 700 ms after your own edit.
+//   * Seeding fixed: an empty table used to leave everyone in "local" mode
+//     forever; we now write the first row ourselves.
+//   * localStorage stays as offline cache/fallback.
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { CHHATH_EVENTS, COUSIN_EVENTS, BRIDGE_EVENTS } from '../data/events-a.js';
 import { WEDDING_EVENTS } from '../data/events-b.js';
 import { KITS } from '../data/kits.js';
 import { catOf } from '../data/cats.js';
+import { decide } from './sync.js';
 
 export const ALL_EVENTS = [...CHHATH_EVENTS, ...COUSIN_EVENTS, ...BRIDGE_EVENTS, ...WEDDING_EVENTS];
 const KEY = 'ghar-ki-shaadi-v2';
+const PULL_MS = 15000;
+const PUSH_MS = 700;
 
 const seedItems = () => {
   const out = [];
@@ -18,7 +29,7 @@ const seedItems = () => {
   return out;
 };
 
-const blank = () => ({ lang: 'hi', items: seedItems(), peopleSeed: [], notes: {}, wishes: [], feedback: [] });
+const blank = () => ({ lang: 'hi', items: seedItems(), peopleSeed: [], notes: {}, wishes: [], feedback: [], updatedAt: 0 });
 
 function load() {
   try {
@@ -39,22 +50,78 @@ export const useStore = () => useContext(Ctx);
 
 export function StoreProvider({ children }) {
   const [state, setState] = useState(load);
-  const [cloud, setCloud] = useState('local');
+  const [cloud, setCloud] = useState('checking'); // checking | neon | local
+  const ref = useRef(state);
+  ref.current = state;
+  const pushTs = useRef(0);  // stamp of the last write we sent
+  const seenTs = useRef(0);  // newest server stamp already accepted
+  const adopting = useRef(false);
 
   useEffect(() => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} }, [state]);
 
+  // PULL: once at boot, then every 15 s so edits reach everyone.
   useEffect(() => {
-    fetch('/api/state').then(r => r.ok ? r.json() : null).then(d => {
-      if (d && d.state) { setState(s => ({ ...load(), ...s, ...d.state })); setCloud('neon'); }
-    }).catch(() => {});
+    let alive = true;
+    const pull = async (initial) => {
+      try {
+        const r = await fetch('/api/state', { headers: { accept: 'application/json' } });
+        if (!r.ok) throw new Error(`http ${r.status}`);
+        const d = await r.json();
+        if (!alive) return;
+        setCloud('neon');
+        const remote = d.state;
+        const action = decide({ remote, initial, seenTs: seenTs.current, pushTs: pushTs.current });
+        if (action === 'adopt') {
+          seenTs.current = Number(remote.updatedAt) || 0;
+          adopting.current = true;
+          setState({ ...load(), ...remote });
+          setTimeout(() => { adopting.current = false; }, 0);
+        } else if (action === 'seed') {
+          const stamp = Date.now();
+          pushTs.current = stamp; seenTs.current = stamp;
+          await fetch('/api/state', {
+            method: 'POST', headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ state: { ...ref.current, updatedAt: stamp } }),
+          });
+        } else if (remote) {
+          seenTs.current = Math.max(seenTs.current, Number(remote.updatedAt) || 0);
+        }
+      } catch {
+        if (initial && alive) setCloud('local');
+      }
+    };
+    pull(true);
+    const id = setInterval(() => pull(false), PULL_MS);
+    return () => { alive = false; clearInterval(id); };
   }, []);
+
+  // PUSH: debounced after your own edit.
   useEffect(() => {
     if (cloud !== 'neon') return;
-    const id = setTimeout(() => {
-      fetch('/api/state', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ state }) }).catch(() => setCloud('local'));
-    }, 1200);
+    if (adopting.current) return;
+    const id = setTimeout(async () => {
+      const stamp = Date.now();
+      pushTs.current = stamp; seenTs.current = stamp;
+      try {
+        await fetch('/api/state', {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ state: { ...ref.current, updatedAt: stamp } }),
+        });
+        setCloud('neon');
+      } catch { setCloud('local'); }
+    }, PUSH_MS);
     return () => clearTimeout(id);
   }, [state, cloud]);
+
+  // Fold server-side rows (wishes/feedback tables) into local state rows.
+  // useCallback([]) keeps it identity-stable so polling effects don't churn.
+  const mergeServer = useCallback((key, rows) => setState(s => {
+    if (!Array.isArray(rows) || rows.length === 0) return s;
+    const cur = s[key] || [];
+    const has = new Set(cur.map(r => `${r.message}|${r.name}`));
+    const extra = rows.filter(r => !has.has(`${r.message}|${r.name}`));
+    return extra.length ? { ...s, [key]: [...cur, ...extra] } : s;
+  }), []);
 
   const api = useMemo(() => ({
     state, cloud,
@@ -83,8 +150,10 @@ export function StoreProvider({ children }) {
       setState(s => ({ ...s, feedback: [{ id: 'f-' + Date.now(), ...w }, ...(s.feedback || [])] }));
       try { await fetch('/api/feedback', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(w) }); } catch {}
     },
+    // Fold server-side rows (wishes/feedback tables) into local state rows.
+    mergeServer,
     reset: () => setState(blank()),
-  }), [state, cloud]);
+  }), [state, cloud, mergeServer]);
 
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>;
 }

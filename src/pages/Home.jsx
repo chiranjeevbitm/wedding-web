@@ -75,18 +75,28 @@ export default function Home() {
 }
 
 function WishBox() {
-  const { state, addWish } = useStore();
+  const { state, addWish, mergeServer } = useStore();
   const lang = state.lang;
   const [name, setName] = useState('');
   const [msg, setMsg] = useState('');
   const [sent, setSent] = useState('');
-  const [list, setList] = useState(state.wishes || []);
-  useEffect(() => { setList(state.wishes || []); }, [state.wishes]);
+  const list = state.wishes || [];
+
+  // Poll every 15 s so wishes posted by anyone else show up here too.
   useEffect(() => {
-    fetch('/api/wishes').then(r => r.ok ? r.json() : null).then(d => {
-      if (d && Array.isArray(d.wishes) && d.wishes.length) setList(d.wishes);
-    }).catch(() => {});
-  }, []);
+    let alive = true;
+    const pull = async () => {
+      try {
+        const r = await fetch('/api/wishes');
+        if (!r.ok) return;
+        const d = await r.json();
+        if (alive && Array.isArray(d.wishes)) mergeServer('wishes', d.wishes);
+      } catch { /* offline → local only */ }
+    };
+    pull();
+    const id = setInterval(pull, 15000);
+    return () => { alive = false; clearInterval(id); };
+  }, [mergeServer]);
   return (
     <div>
       <div className="addrow">
