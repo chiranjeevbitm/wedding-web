@@ -8,8 +8,31 @@
 .gate-title { font-family: var(--font-dev); font-size: clamp(30px, 8vw, 44px); color: #FFF3DC; margin: 2px 0; text-shadow: 0 2px 24px rgba(0,0,0,.5); }
 .gate-couple { font-family: var(--font-display); font-size: clamp(18px, 5vw, 24px); color: #FFE9BD; }
 .gate-place { font-size: 13px; opacity: .9; margin-top: 4px; }
-.gate-count { margin-top: 4svh; }
-.gate-count-num { font-family: var(--font-display); font-size: clamp(64px, 20vw, 110px); line-height: 1; color: #FFD98A; text-shadow: 0 4px 40px rgba(216,155,50,.55); animation: pop .5s ease both; }
+.gate-count { margin-top: 3svh; }
+.gate-count-num { font-family: var(--font-body); font-weight: 900; font-size: clamp(58px, 18vw, 96px); line-height: 1; color: #FFD98A; text-shadow: 0 4px 40px rgba(216,155,50,.65); animation: pop .5s ease both; }
+
+/* DD : HH : MM : SS — punchy, bold, tabular digits, tick animation */
+.gate-timer { display: flex; align-items: flex-start; justify-content: center; gap: 5px; }
+.gate-cell {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-width: 66px; padding: 8px 4px 6px; border-radius: 16px;
+  background: rgba(20,10,12,.42); border: 1px solid rgba(255,247,232,.22);
+  box-shadow: inset 0 1px 0 rgba(255,247,232,.18), 0 10px 24px rgba(0,0,0,.35);
+  backdrop-filter: blur(5px);
+}
+.gate-cell-num {
+  font-family: var(--font-body); font-weight: 900; font-size: clamp(32px, 10vw, 52px);
+  line-height: 1; letter-spacing: -.02em; color: #FFF6DF;
+  font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1;
+  text-shadow: 0 3px 26px rgba(233,169,59,.55), 0 1px 0 rgba(0,0,0,.45);
+  animation: tick .45s cubic-bezier(.22,1,.36,1) both;
+}
+.gate-cell-lab { font-size: 9.5px; font-weight: 800; letter-spacing: .18em; color: #FFE2A8; opacity: .92; margin-top: 6px; }
+.gate-sec { color: var(--marigold); }
+.gate-sep { font-weight: 900; font-size: clamp(24px, 7vw, 38px); line-height: 1; color: var(--marigold); margin-top: 10px; text-shadow: 0 0 18px rgba(233,169,59,.8); }
+.gate-sep-blink { animation: blink 1s steps(1, end) infinite; }
+@keyframes tick { from { opacity: .25; transform: translateY(-8px) scale(.92); filter: blur(1px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: .2; } }
 .gate-count-label { font-weight: 700; letter-spacing: .02em; }
 .gate-tagline { font-style: italic; opacity: .9; font-size: 13.5px; margin-top: 6px; }
 .gate-pin { margin-top: auto; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
@@ -25,5 +48,6 @@
 .gate-go { width: 100%; margin-top: 12px; background: linear-gradient(90deg, var(--maroon), var(--sindoor)); box-shadow: 0 10px 30px rgba(0,0,0,.4); }
 .gate-hint { font-size: 12.5px; opacity: .85; margin: 8px 0 0; }
 .gate-err { background: rgba(179,58,58,.9); border-radius: 12px; padding: 10px 12px; font-size: 13.5px; margin: 10px 0 0; }
+.gate-ok { background: rgba(92,115,80,.92); border-radius: 12px; padding: 10px 12px; font-size: 13.5px; margin: 10px 0 0; }
 .gate-lang { margin-top: 10px; border: 1.5px solid rgba(255,247,232,.5); background: transparent; color: #FFF7E8; border-radius: 999px; padding: 8px 18px; font-weight: 700; min-height: 44px; }
 @media (min-width: 700px) { .gate-count { margin-top: 6svh; } }
