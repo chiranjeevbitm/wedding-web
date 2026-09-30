@@ -11,36 +11,27 @@
 .gate-count { margin-top: 3svh; }
 .gate-count-num { font-family: var(--font-body); font-weight: 900; font-size: clamp(58px, 18vw, 96px); line-height: 1; color: #FFD98A; text-shadow: 0 4px 40px rgba(216,155,50,.65); animation: pop .5s ease both; }
 
-/* DD : HH : MM : SS — punchy, bold, tabular digits, tick animation */
-.gate-timer { display: flex; align-items: flex-start; justify-content: center; gap: 5px; }
-.gate-cell {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  min-width: 66px; padding: 8px 4px 6px; border-radius: 16px;
-  background: rgba(20,10,12,.42); border: 1px solid rgba(255,247,232,.22);
-  box-shadow: inset 0 1px 0 rgba(255,247,232,.18), 0 10px 24px rgba(0,0,0,.35);
-  backdrop-filter: blur(5px);
-}
+/* DD : HH : MM : SS — no boxes, no bold, very dark, tabular digits */
+.gate-timer { display: flex; align-items: flex-start; justify-content: center; gap: 10px; }
+.gate-cell { display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: 0; box-shadow: none; backdrop-filter: none; padding: 0; }
 .gate-cell-num {
-  font-family: var(--font-body); font-weight: 900; font-size: clamp(32px, 10vw, 52px);
-  line-height: 1; letter-spacing: -.02em; color: #FFF6DF;
+  font-family: var(--font-body); font-weight: 400; font-size: clamp(34px, 11vw, 54px);
+  line-height: 1; letter-spacing: -.01em; color: #17110F;
   font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1;
-  text-shadow: 0 3px 26px rgba(233,169,59,.55), 0 1px 0 rgba(0,0,0,.45);
+  text-shadow: 0 1px 1px rgba(255,255,255,.55), 0 0 18px rgba(255,248,232,.55);
   animation: tick .45s cubic-bezier(.22,1,.36,1) both;
 }
-.gate-cell-lab { font-size: 9.5px; font-weight: 800; letter-spacing: .18em; color: #FFE2A8; opacity: .92; margin-top: 6px; }
-.gate-sec { color: var(--marigold); }
-.gate-sep { font-weight: 900; font-size: clamp(24px, 7vw, 38px); line-height: 1; color: var(--marigold); margin-top: 10px; text-shadow: 0 0 18px rgba(233,169,59,.8); }
+.gate-cell-lab { font-size: 11px; font-weight: 500; letter-spacing: .08em; color: #17110F; opacity: .95; margin-top: 4px; text-shadow: 0 1px 1px rgba(255,255,255,.5); }
+.gate-sec { color: #17110F; }
+.gate-sep { font-weight: 400; font-size: clamp(26px, 8vw, 42px); line-height: 1; color: #17110F; margin-top: 6px; text-shadow: 0 1px 1px rgba(255,255,255,.5); }
 .gate-sep-blink { animation: blink 1s steps(1, end) infinite; }
-@keyframes tick { from { opacity: .25; transform: translateY(-8px) scale(.92); filter: blur(1px); } to { opacity: 1; transform: none; filter: none; } }
-@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: .2; } }
-.gate-count-label { font-weight: 700; letter-spacing: .02em; }
+@keyframes tick { from { opacity: .25; transform: translateY(-8px) scale(.92); } to { opacity: 1; transform: none; } }
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: .3; } }
+.gate-count-label { font-weight: 500; letter-spacing: .02em; color: #17110F; text-shadow: 0 1px 1px rgba(255,255,255,.5); }
 .gate-tagline { font-style: italic; opacity: .9; font-size: 13.5px; margin-top: 6px; }
 .gate-pin { margin-top: auto; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
 .gate-pin-title { font-weight: 700; display: flex; flex-direction: column; gap: 2px; }
 .gate-clock { font-size: 13px; font-weight: 600; opacity: .9; }
-.gate-dots { display: flex; gap: 12px; justify-content: center; margin: 12px 0; }
-.gate-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,247,232,.8); transition: transform .15s ease, background .2s; }
-.gate-dot.on { background: var(--marigold); border-color: var(--marigold); transform: scale(1.15); box-shadow: 0 0 14px rgba(233,169,59,.8); }
 /* Transparent PIN box — only the border is visible, no fill, no colon. */
 .gate-input { width: 100%; margin-top: 14px; background: transparent; border: 2px solid rgba(255,247,232,.85); border-radius: 16px; color: #FFF7E8; text-align: center; font-size: 28px; font-weight: 700; letter-spacing: .6em; text-indent: .6em; padding: 14px 12px; min-height: 60px; }
 .gate-input::placeholder { color: rgba(255,247,232,.55); letter-spacing: .1em; text-indent: 0; font-size: 16px; font-weight: 500; }
