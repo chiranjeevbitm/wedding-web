@@ -4,5 +4,4 @@ dist/
 !.env.example
 .DS_Store
 *.m4a
-*.mp4
 .vercel
