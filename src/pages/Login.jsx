@@ -24,23 +24,16 @@ export default function Login() {
     return () => clearInterval(id);
   }, []);
 
-  const press = (d) => {
-    setErr('');
-    setPin((p) => (p + d).slice(0, 4));
-  };
-  const back = () => {
-    setErr('');
-    setPin((p) => p.slice(0, -1));
-  };
   const go = (value = pin) => {
     if (checkPin(value)) {
       unlock();
       nav('/', { replace: true });
     } else {
+      const digits = currentPinHint().replace(':', '');
       setErr(
         lang === 'hi'
-          ? `गलत PIN — अभी कोलकाता समय ${kolkataClock()} है, उसी के 4 अंक (जैसे ${currentPinHint()}) डालें।`
-          : `Wrong PIN — Kolkata time now is ${kolkataClock()}; enter its 4 digits (e.g. ${currentPinHint()}).`
+          ? `गलत PIN — अभी कोलकाता समय ${kolkataClock()} है, उसी के अंक (${digits}) डालें।`
+          : `Wrong PIN — Kolkata time now is ${kolkataClock()}; enter its digits (${digits}).`
       );
       setPin('');
     }
@@ -81,30 +74,33 @@ export default function Login() {
           {lang === 'hi' ? '🔑 अभी का समय = PIN' : '🔑 Current time = PIN'}
           <span className="gate-clock">{kolkataClock(now)} IST</span>
         </div>
-        <div className="gate-dots" aria-live="polite">
-          {[0, 1, 2, 3].map((i) => (
-            <span key={i} className={`gate-dot ${pin.length > i ? 'on' : ''}`} />
-          ))}
-        </div>
-        <div className="gate-keys">
-          {['1', '2', '3', '4', '5', '6', '7', '8', '9', '00', '0', '⌫'].map((k) => (
-            <button
-              key={k}
-              className="gate-key press"
-              onClick={() => (k === '⌫' ? back() : press(k))}
-              aria-label={k === '⌫' ? 'backspace' : `digit ${k}`}
-            >
-              {k}
-            </button>
-          ))}
-        </div>
+        <input
+          className="gate-input"
+          type="password"
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          maxLength={4}
+          value={pin}
+          autoFocus
+          onChange={(e) => {
+            setErr('');
+            setPin(e.target.value.replace(/\D/g, '').slice(0, 4));
+          }}
+          onKeyDown={(e) => { if (e.key === 'Enter') go(); }}
+          placeholder={lang === 'hi' ? 'PIN डालें' : 'Enter PIN'}
+          aria-label={lang === 'hi' ? 'PIN डालें' : 'Enter PIN'}
+        />
         <button className="btn gate-go press" onClick={() => go()}>
           {lang === 'hi' ? 'अंदर जाएँ →' : 'Enter →'}
         </button>
         <p className="gate-hint">
-          {lang === 'hi'
-            ? `जैसे अभी ${currentPinHint(now)} बज रहा है → ${currentPinHint(now).replace(':', '')} या ${currentPinHint(now).replace(/^0/, '')} डालें`
-            : `If it is ${currentPinHint(now)} now → enter ${currentPinHint(now).replace(':', '')} or ${currentPinHint(now).replace(/^0/, '')}`}
+          {(() => {
+            const digits = currentPinHint(now).replace(':', '');
+            const short = digits.replace(/^0/, '');
+            return lang === 'hi'
+              ? `जैसे अभी ${digits} बज रहा है → ${digits} या ${short} डालें`
+              : `If it is ${digits} now → enter ${digits} or ${short}`;
+          })()}
         </p>
         {err && <p className="gate-err pop">{err}</p>}
         <button className="gate-lang" onClick={() => (window.location.hash = '#lang', window.dispatchEvent(new Event('shaadi:lang')))}>

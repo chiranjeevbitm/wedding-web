@@ -18,9 +18,10 @@
 .gate-dots { display: flex; gap: 12px; justify-content: center; margin: 12px 0; }
 .gate-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,247,232,.8); transition: transform .15s ease, background .2s; }
 .gate-dot.on { background: var(--marigold); border-color: var(--marigold); transform: scale(1.15); box-shadow: 0 0 14px rgba(233,169,59,.8); }
-.gate-keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.gate-key { border: 1.5px solid rgba(255,247,232,.35); background: rgba(255,247,232,.12); color: #FFF7E8; border-radius: 16px; min-height: 56px; font-size: 22px; font-weight: 700; backdrop-filter: blur(6px); }
-.gate-key:active { background: rgba(233,169,59,.45); }
+/* Transparent PIN box — only the border is visible, no fill, no colon. */
+.gate-input { width: 100%; margin-top: 14px; background: transparent; border: 2px solid rgba(255,247,232,.85); border-radius: 16px; color: #FFF7E8; text-align: center; font-size: 28px; font-weight: 700; letter-spacing: .6em; text-indent: .6em; padding: 14px 12px; min-height: 60px; }
+.gate-input::placeholder { color: rgba(255,247,232,.55); letter-spacing: .1em; text-indent: 0; font-size: 16px; font-weight: 500; }
+.gate-input:focus { outline: none; border-color: var(--marigold); box-shadow: 0 0 0 3px rgba(233,169,59,.35); background: transparent; }
 .gate-go { width: 100%; margin-top: 12px; background: linear-gradient(90deg, var(--maroon), var(--sindoor)); box-shadow: 0 10px 30px rgba(0,0,0,.4); }
 .gate-hint { font-size: 12.5px; opacity: .85; margin: 8px 0 0; }
 .gate-err { background: rgba(179,58,58,.9); border-radius: 12px; padding: 10px 12px; font-size: 13.5px; margin: 10px 0 0; }
