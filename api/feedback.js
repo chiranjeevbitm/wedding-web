@@ -1,9 +1,8 @@
-import { neon } from '@neondatabase/serverless';
-
-const sql = neon(process.env.DATABASE_URL);
+import { getSql, dbError } from './_db.js';
 
 export default async function handler(req, res) {
   try {
+    const sql = getSql();
     await sql`CREATE TABLE IF NOT EXISTS feedback (
       id SERIAL PRIMARY KEY, name TEXT NOT NULL DEFAULT '', message TEXT NOT NULL,
       created_at TIMESTAMPTZ DEFAULT NOW()
@@ -21,6 +20,6 @@ export default async function handler(req, res) {
     }
     return res.status(405).json({ error: 'method not allowed' });
   } catch (e) {
-    return res.status(500).json({ error: String(e?.message || e) });
+    return res.status(500).json(dbError(e));
   }
 }

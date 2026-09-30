@@ -42,9 +42,11 @@ export function apiDevPlugin() {
       const { default: state } = await import('../api/state.js');
       const { default: wishes } = await import('../api/wishes.js');
       const { default: feedback } = await import('../api/feedback.js');
+      const { default: diag } = await import('../api/diag.js');
       server.middlewares.use('/api/state', wrap(state));
       server.middlewares.use('/api/wishes', wrap(wishes));
       server.middlewares.use('/api/feedback', wrap(feedback));
+      server.middlewares.use('/api/diag', wrap(diag));
       server.config.logger.info('  [api-dev] Neon /api/* live at dev time → changes sync everywhere');
     },
   };

@@ -1,8 +1,6 @@
-import { neon } from '@neondatabase/serverless';
+import { getSql, dbError } from './_db.js';
 
-const sql = neon(process.env.DATABASE_URL);
-
-async function ensure() {
+async function ensure(sql) {
   await sql`CREATE TABLE IF NOT EXISTS rsvp (
     id SERIAL PRIMARY KEY, name TEXT NOT NULL, side TEXT DEFAULT 'groom',
     attending TEXT DEFAULT 'yes', count TEXT DEFAULT '1', phone TEXT DEFAULT '',
@@ -20,7 +18,8 @@ async function ensure() {
 
 export default async function handler(req, res) {
   try {
-    await ensure();
+    const sql = getSql();
+    await ensure(sql);
     if (req.method === 'GET') {
       const rows = await sql`SELECT state FROM app_state WHERE id = 1`;
       return res.status(200).json({ state: rows[0]?.state || null });
@@ -34,6 +33,6 @@ export default async function handler(req, res) {
     }
     return res.status(405).json({ error: 'method not allowed' });
   } catch (e) {
-    return res.status(500).json({ error: String(e?.message || e) });
+    return res.status(500).json(dbError(e));
   }
 }
