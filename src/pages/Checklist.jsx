@@ -46,7 +46,7 @@ export default function Checklist() {
         {CATS.map(c => <button key={c.id} className={`seg-btn press ${cat === c.id ? 'on' : ''}`} onClick={() => setCat(c.id)}><span>{c.icon}</span>{lang === 'hi' ? c.hi : c.en}</button>)}
       </div>
       <p className="small muted">
-        {catMeta.icon} {catMeta.range} · {lang === 'hi' ? 'तारीख़ के क्रम में' : 'in date order'} · {dayOrder.length} {lang === 'hi' ? 'दिन' : 'days'}
+        {catMeta.icon} {catMeta.range} · {lang === 'hi' ? 'तारीख़ के क्रम में' : 'in date order'} · {groups.length} {lang === 'hi' ? 'दिन' : 'days'}
       </p>
       {groups.map(({ day, items: arr }, i) => {
         const { done: d, pct } = groupProgress(arr);
