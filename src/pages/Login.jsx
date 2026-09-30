@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useStore } from '../lib/store.jsx';
 import { SEASON_META } from '../data/journey.js';
 import { t } from '../lib/format.js';
-import { checkPin, countdownParts, kolkataClock, pinCandidates, unlock } from '../lib/gate.js';
+import { checkPin, countdownParts, isUnlocked, kolkataClock, pinCandidates, unlock } from '../lib/gate.js';
 
 // Full-screen gate: login-page-video.mp4 behind, live countdown centre,
 // PIN box a little above the bottom. Password = current Kolkata time (12-hr).
@@ -25,6 +25,11 @@ export default function Login() {
     }, 1000);
     return () => clearInterval(id);
   }, []);
+
+  // Already unlocked (e.g. back button) — go straight in.
+  useEffect(() => {
+    if (isUnlocked()) nav('/', { replace: true });
+  }, [nav]);
 
   const go = (value = pin) => {
     if (checkPin(value)) {
