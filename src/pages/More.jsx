@@ -4,7 +4,7 @@ import { useStore } from '../lib/store.jsx';
 import { Section } from '../components/ui.jsx';
 
 export default function More() {
-  const { state, setLang, addFeedback, reset, cloud } = useStore();
+  const { state, setLang, addFeedback, cloud } = useStore();
   const lang = state.lang;
   const [name, setName] = useState('');
   const [msg, setMsg] = useState('');
@@ -61,7 +61,6 @@ export default function More() {
         </div>
         <div className="row" style={{ marginTop: 10 }}>
           <button className="btn small ghost press" onClick={exportJSON}>{lang === 'hi' ? 'फ़ाइल निर्यात' : 'Export'}</button>
-          <button className="btn small ghost press" onClick={() => { if (confirm(lang === 'hi' ? 'आधिकारिक प्लान पर लौटें?' : 'Reset?')) reset(); }}>{lang === 'hi' ? 'रीसेट' : 'Reset'}</button>
           <button className="btn small ghost press" onClick={() => { window.dispatchEvent(new Event('shaadi:lock')); }}>{lang === 'hi' ? 'लॉक 🔒' : 'Lock 🔒'}</button>
           <Link className="btn small ghost press" to="/about">{lang === 'hi' ? 'हमारे बारे में' : 'About'}</Link>
           <button className="btn small ghost press" onClick={() => window.print()}>{lang === 'hi' ? 'प्रिंट' : 'Print'}</button>

@@ -3,8 +3,5 @@ dist/
 .env*
 !.env.example
 .DS_Store
-*.m4a
-*.mp4
-login-page-video.mp4
 public/login-bg.mp4
 .vercel
