@@ -52,10 +52,17 @@ export default function More() {
         <div className="row"><b>{lang === 'hi' ? 'भाषा' : 'Language'}</b>
           <button className="btn small ghost press" onClick={() => setLang('hi')}>हिं</button>
           <button className="btn small ghost press" onClick={() => setLang('en')}>EN</button></div>
-        <div className="small muted" style={{ marginTop: 6 }}>Cloud: {cloud === 'neon' ? '🟢 Neon DB' : '⚪ ' + (lang === 'hi' ? 'इसी फ़ोन में' : 'this phone only')}</div>
+        <div className="small" style={{ marginTop: 8, background: '#FFF8E7', border: '1px dashed var(--line)', borderRadius: 12, padding: '10px 12px' }}>
+          {cloud === 'neon'
+            ? (lang === 'hi' ? '🟢 क्लाउड जुड़ा — यह बदलाव सबके फ़ोन पर दिखेगा।' : '🟢 Cloud connected — changes appear on every phone.')
+            : (lang === 'hi'
+              ? '⚪ सिर्फ़ इसी फ़ोन में — यानी बदलाव अभी सिर्फ़ आपके फ़ोन में सेव है, दूसरों को नहीं दिखेगा। Vercel पर DATABASE_URL डालते ही 🟢 हो जाएगा।'
+              : '⚪ This phone only — changes save just on your phone for now; others cannot see them. It turns 🟢 once DATABASE_URL is set on Vercel.')}
+        </div>
         <div className="row" style={{ marginTop: 10 }}>
           <button className="btn small ghost press" onClick={exportJSON}>{lang === 'hi' ? 'फ़ाइल निर्यात' : 'Export'}</button>
           <button className="btn small ghost press" onClick={() => { if (confirm(lang === 'hi' ? 'आधिकारिक प्लान पर लौटें?' : 'Reset?')) reset(); }}>{lang === 'hi' ? 'रीसेट' : 'Reset'}</button>
+          <button className="btn small ghost press" onClick={() => { window.dispatchEvent(new Event('shaadi:lock')); }}>{lang === 'hi' ? 'लॉक 🔒' : 'Lock 🔒'}</button>
           <Link className="btn small ghost press" to="/about">{lang === 'hi' ? 'हमारे बारे में' : 'About'}</Link>
           <button className="btn small ghost press" onClick={() => window.print()}>{lang === 'hi' ? 'प्रिंट' : 'Print'}</button>
         </div>
